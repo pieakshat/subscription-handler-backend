@@ -1,8 +1,9 @@
 import mongoose from "mongoose"
 import User from "../models/user.model.js"
-import bcrypt from 'bcrypt.js'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env"
+import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js"
+import authRouter from "../routes/auth.routes.js"
 
 export const signUp = async (req, res, next) => {
     // it's a session of a mongoose transaction
@@ -57,5 +58,7 @@ export const signIn = async (req, res) => {
 export const signOut = async (req, res) => {
 
 }
+
+// export default authRouter;
 
 
