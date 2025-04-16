@@ -4,17 +4,18 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js"
 import authRouter from "../routes/auth.routes.js"
+import userRouter from "../routes/user.routes.js"
 
 export const signUp = async (req, res, next) => {
     // it's a session of a mongoose transaction
     const session = await mongoose.startSession();
-    session.startTransaction(); // this is done to ensure the atomic property of transactions
+    session.startTransaction();
 
     try {
-        // logic to create a new user 
+
+        // get the data from the body 
         const { name, email, password } = req.body;
 
-        // Check if a user already exists 
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -23,11 +24,10 @@ export const signUp = async (req, res, next) => {
             throw error;
         }
 
-        // Hash password 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUsers = await userRouter.create([{ name, email, password: hashedPassword }], { session });
+        const newUsers = await User.create([{ name, email, password: hashedPassword }], { session });
 
         const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
@@ -45,7 +45,7 @@ export const signUp = async (req, res, next) => {
 
     } catch (error) {
         await session.abortTransaction();
-        session.endSession();
+        session.endSession()
         next(error);
     }
 }
