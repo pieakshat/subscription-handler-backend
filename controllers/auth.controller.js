@@ -94,6 +94,18 @@ export const signIn = async (req, res, next) => {
 
 export const signOut = async (req, res) => {
 
+    try {
+        res.status(200).json({
+            success: true,
+            message: 'User signed out suceessfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong while signing out'
+        });
+    }
+
 }
 
 // export default authRouter;
