@@ -1,5 +1,5 @@
 import { json } from 'express';
-import Subscription from '../models/subscription.model';
+import Subscription from '../models/subscription.model.js';
 
 export const getSubscriptions = async (req, res, next) => {
     try {
@@ -29,3 +29,18 @@ export const getSubscription = async (req, res, next) => {
     }
 }
 
+export const createSubscription = (req, res, next) => {
+    try {
+        const subscription = Subscription.create({
+            ...req.body,
+            user: req.user._id,
+        })
+
+        res.status(201).json({ success: true, data: subscription });
+
+    } catch (error) {
+
+    }
+}
+
+export default createSubscription; 
