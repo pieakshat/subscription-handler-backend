@@ -34,7 +34,7 @@ const subscriptionSchema = new mongoose.Schema({
 
     paymentMethod: {
         type: String,
-        enum: ['active', 'cancelled', 'expired'],
+        enum: ['credit card', 'UPI'],
         default: 'active'
     },
 
@@ -49,7 +49,7 @@ const subscriptionSchema = new mongoose.Schema({
 
     renewalDate: {
         type: Date,
-        required: true,
+        // required: true,
         validate: {
             validator: function (value) {
                 return value > this.startDate;
